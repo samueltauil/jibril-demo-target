@@ -20,6 +20,8 @@ COPY src ./src
 # ── Runtime stage ─────────────────────────────────────────────────────────────
 FROM node:22-alpine
 
+LABEL org.opencontainers.image.source=https://github.com/samueltauil/jibril-demo-target
+
 RUN apk add --no-cache bash curl sudo
 
 WORKDIR /app
