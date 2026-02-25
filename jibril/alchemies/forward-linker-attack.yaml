@@ -1,0 +1,31 @@
+# Alchemy: Forward dynamic linker attack events (LD_PRELOAD).
+# Triggered by: Scenario 6 (linker-hijack)
+# Matches chain step: persistence / dynamic_linker_attacks
+
+- kind: dynamic_linker_attacks
+  name: forward_linker_attack
+  enabled: true
+  version: 1.0
+  description: "Forward dynamic linker attack events to the correlation agent"
+  breed: env_vars
+  mechanism: env_vars
+  tactic: persistence
+  technique: hijack_execution_flow
+  subtechnique: dynamic_linker_hijacking
+  importance: high
+  severity_level: high
+  severity: 88
+  confidence: 0.90
+  times:
+    - kind: times_per_proc
+      max: 2
+    - kind: times_per_exe
+      max: 4
+    - kind: times_per_full_ancestry
+      max: 4
+  arbitrary: []
+
+  reactions:
+    - format: shell
+      code: |
+        curl -sf -X POST -H "Content-Type: application/json" -d "$REACTION_DATA" ${AGENT_URL:-http://localhost:3000}/events || true

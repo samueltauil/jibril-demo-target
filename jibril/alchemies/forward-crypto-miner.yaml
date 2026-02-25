@@ -1,0 +1,31 @@
+# Alchemy: Forward crypto miner execution events.
+# Triggered by: Scenario 4 (cryptojacking — xmrig execution)
+# Matches chain step: impact / crypto_miner_execution
+
+- kind: crypto_miner_execution
+  name: forward_crypto_miner
+  enabled: true
+  version: 1.0
+  description: "Forward crypto miner execution events to the correlation agent"
+  breed: exec
+  mechanism: exec
+  tactic: impact
+  technique: resource_hijacking
+  subtechnique: none
+  importance: critical
+  severity_level: critical
+  severity: 95
+  confidence: 0.92
+  times:
+    - kind: times_per_proc
+      max: 1
+    - kind: times_per_exe
+      max: 2
+    - kind: times_per_full_ancestry
+      max: 2
+  arbitrary: []
+
+  reactions:
+    - format: shell
+      code: |
+        curl -sf -X POST -H "Content-Type: application/json" -d "$REACTION_DATA" ${AGENT_URL:-http://localhost:3000}/events || true

@@ -1,0 +1,31 @@
+# Alchemy: Forward threat domain / C2 connection events.
+# Triggered by: Scenarios 2 (execution-c2-exfil), 4 (cryptojacking)
+# Matches chain step: command_and_control
+
+- kind: threat_domain_access
+  name: forward_threat_domain
+  enabled: true
+  version: 1.0
+  description: "Forward threat domain access events to the correlation agent"
+  breed: network_peers
+  mechanism: network_peers
+  tactic: command_and_control
+  technique: application_layer_protocol
+  subtechnique: none
+  importance: high
+  severity_level: high
+  severity: 80
+  confidence: 0.85
+  times:
+    - kind: times_per_proc
+      max: 4
+    - kind: times_per_exe
+      max: 8
+    - kind: times_per_full_ancestry
+      max: 8
+  arbitrary: []
+
+  reactions:
+    - format: shell
+      code: |
+        curl -sf -X POST -H "Content-Type: application/json" -d "$REACTION_DATA" ${AGENT_URL:-http://localhost:3000}/events || true

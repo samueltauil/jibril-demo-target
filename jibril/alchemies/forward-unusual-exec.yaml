@@ -1,0 +1,31 @@
+# Alchemy: Forward execution from unusual directory events.
+# Triggered by: Scenarios 2, 3, 5, 6 (exec from /tmp, /dev/shm)
+# Matches chain step: defense_evasion / exec_from_unusual_dir
+
+- kind: exec_from_unusual_dir
+  name: forward_unusual_exec
+  enabled: true
+  version: 1.0
+  description: "Forward execution from unusual directory events to the correlation agent"
+  breed: exec
+  mechanism: exec
+  tactic: defense_evasion
+  technique: masquerading
+  subtechnique: none
+  importance: high
+  severity_level: medium
+  severity: 60
+  confidence: 0.65
+  times:
+    - kind: times_per_proc
+      max: 4
+    - kind: times_per_exe
+      max: 8
+    - kind: times_per_full_ancestry
+      max: 8
+  arbitrary: []
+
+  reactions:
+    - format: shell
+      code: |
+        curl -sf -X POST -H "Content-Type: application/json" -d "$REACTION_DATA" ${AGENT_URL:-http://localhost:3000}/events || true

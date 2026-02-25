@@ -1,0 +1,22 @@
+# Jibril Configuration for Demo Target
+#
+# This config enables the event kinds that the demo target scenarios trigger,
+# with shell reactions that forward events to the Jibril Correlation Agent.
+#
+# The AGENT_URL environment variable must be set when starting Jibril:
+#   sudo AGENT_URL=https://your-agent.azurecontainerapps.io jibril --config /etc/jibril/config.yaml
+#
+# For local testing:
+#   sudo AGENT_URL=http://localhost:3000 jibril --config /etc/jibril/config.yaml
+
+general:
+  output:
+    - json
+
+events:
+  # Events triggered by the 6 demo scenarios:
+  - credentials_files_access    # Scenarios 1, 3: reading /etc/shadow
+  - exec_from_unusual_dir       # Scenarios 2, 3, 5, 6: exec from /tmp, /dev/shm
+  - crypto_miner_execution      # Scenario 4: xmrig execution
+  - threat_domain_access        # Scenarios 2, 4: C2/mining pool connections
+  - dynamic_linker_attacks      # Scenario 6: LD_PRELOAD
